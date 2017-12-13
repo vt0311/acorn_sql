@@ -1,0 +1,20 @@
+﻿-- 관리자에서 
+-- 현 테이블 스페이스 확인
+select file_name, tablespace_name, bytes/1024/1024 as MB from  dba_data_files;
+
+-- 파일 추가하면서 무제한 옵션을 준다.
+alter tablespace USERS
+add datafile 'C:\ORACLEXE\APP\ORACLE\ORADATA\XE\USERS02.DBF' size 2m
+autoextend on next 1m maxsize unlimited;
+
+-- 호돌이 계정 생성
+create user hodori identified by oracle account unlock  ;
+
+grant connect, resource to hodori  ;
+
+-- 호돌이가 테이블 만들때 기본 값으로 users 테이블 스페이스 사용하게끔
+alter user hodori  default tablespace users ;
+
+-- hodori로 접속하고
+-- 테이블 생성시 tablespace 명시해주면 됨
+create table aaa(id number) tablespace users ;

@@ -543,11 +543,590 @@ create table barCodeData(
 	"DOSE_DAYS" NUMBER(4,0), 
 	"UNIT_COST" NUMBER(6,0), 
 	"PRICE" NUMBER(10,0)
- )
+ );
+ 
+ CREATE TABLE DRUG_2015 (
+    "BASE_YEAR" NUMBER(4,0), 
+	"USER_ID" NUMBER(10,0), 
+	"PRES_ID" NUMBER(10,0), 
+	"SERIAL_NUM" NUMBER(3,0), 
+	"SEX" NUMBER(1,0), 
+	"AGE_CODE" NUMBER(2,0), 
+	"SIDO_CODE" NUMBER(2,0), 
+	"RECUPERATE_DATE" VARCHAR2(20 BYTE), 
+	"DRUG_INGREDIENT_CODE" VARCHAR2(20 BYTE), 
+	"DOSE_ONCE" FLOAT(126), 
+	"DOSE_ONEDAY" NUMBER(2,0), 
+	"DOSE_DAYS" NUMBER(4,0), 
+	"UNIT_COST" NUMBER(6,0), 
+	"PRICE" NUMBER(10,0)
+ );
  
  --DELETE FROM DRUG_2015; 
- SELECT * FROM DRUG_2015; 
-  SELECT COUNT(*) FROM DRUG_2015; 
  
+ -- 29470145
+ select count(*) from (
+ SELECT * FROM DRUG_2015
+ union all
+ select * from drug_2015_2); 
+ 
+  -- 29470145
+ select count(*) from (
+ SELECT * FROM DRUG_2015
+ union 
+ select * from drug_2015_2); 
+ 
+ 
+  SELECT COUNT(*) FROM DRUG_2015; 
+  
+  -- DRUG_2015¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM 
+            (SELECT DRUG_INGREDIENT_CODE FROM DRUG_2015 UNION ALL SELECT DRUG_INGREDIENT_CODE FROM DRUG_2015_2 ) A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc;
+    
+    -- DRUG_2014¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM 
+            (SELECT DRUG_INGREDIENT_CODE FROM DRUG_2014_1 UNION ALL SELECT DRUG_INGREDIENT_CODE FROM DRUG_2014_2 ) A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc;
+    
+     -- DRUG_2013¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM 
+            DRUG_2013 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc;
+    
+     -- DRUG_2012¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM 
+            DRUG_2012 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc;
+    
+    -- DRUG_2011¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM 
+            DRUG_2011 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc;
+    
+    -- DRUG_2015¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸® °¹¼ö
+    SELECT COUNT(*) FROM (
+    SELECT A.DRUG_INGREDIENT_CODE, COUNT(A.DRUG_INGREDIENT_CODE) FROM DRUG_2015 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%'
+    GROUP BY A.DRUG_INGREDIENT_CODE
+    order by count(DRUG_INGREDIENT_CODE) desc);
     
     
+    
+    -- DRUG_2015¿¡¼­ ATC CODE °¡ N06A¸¸ »Ì´Â Äõ¸®  
+    SELECT * FROM 
+            DRUG_2013 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%';
+    --GROUP BY A.DRUG_INGREDIENT_CODE
+    --order by count(DRUG_INGREDIENT_CODE) desc;
+    
+    SELECT COUNT(*) FROM (
+     SELECT * FROM 
+            DRUG_2013 A, BARCODEDATA B 
+    WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+    AND B.ATC_CD like 'N06A%');
+    
+    SELECT * FROM BARCODEDATA;
+    
+    SELECT COUNT(*) FROM (
+     SELECT PRODUCT_NAME FROM BARCODEDATA WHERE DRUG_INGREDIENT_CODE IS NULL GROUP BY PRODUCT_NAME) ; 
+    
+    SELECT COUNT(*) FROM BARCODEDATA WHERE DRUG_INGREDIENT_CODE IS NULL; 
+    
+      SELECT * FROM BARCODEDATA WHERE DRUG_INGREDIENT_CODE IS NULL; 
+      
+      -- °¹¼ö
+      SELECT COUNT(*) FROM (
+      SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+        UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT * FROM BARCODEDATA WHERE aTC_CD LIKE 'N06A%' AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE )
+       ;
+       
+       -- 2012 ~ 2015³â ÇÁ·ÎÁ§Æ® Å×ÀÌºí  
+        SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+        UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT "PRODUCT_NAME" , 
+	"COMPANY_NAME" ,
+    "DRUG_STD" , 
+    "QTY" ,
+	"DOSAGE_TYPE" , 
+	"PACKING_TYPE" ,
+    "PRODUCT_STD_CD" ,
+	"PERMISSION_DATE" ,
+    "NORMAL_OR_SPECIAL" ,
+    "REPRESENT_CD" , 
+    "STD_CD",
+    "NEW_CD" ,  
+    "DRUG_INGREDIENT_CODE" ,
+    "CANCEL_DATE",
+    "TRANSFER_START_DATE" ,
+    "TRANSFER_END_DATE" ,
+    "SERIAL_YN" ,
+    "SERIAL_REASON" ,
+    "ATC_CD" ,
+    "SPECIAL_CARE" ,
+    "DECODE"  FROM BARCODEDATA WHERE aTC_CD LIKE 'N06A%' AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE ;
+        
+    /*    
+     BASE_YEAR ,
+	USER_ID ,
+	PRES_ID ,
+	SERIAL_NUM ,
+	SEX ,
+	AGE_CODE ,
+	SIDO_CODE ,
+	RECUPERATE_DATE ,
+	DRUG_INGREDIENT_CODE ,
+	DOSE_ONCE ,
+	DOSE_ONEDAY ,
+	DOSE_DAYS ,
+	UNIT_COST ,
+	PRICE */
+    
+          -- 2012 ~ 2015³â ÇÁ·ÎÁ§Æ® Å×ÀÌºí CTAS
+        CREATE TABLE N06A_DRUG AS (  
+        SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+        UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       "PRODUCT_NAME" , 
+        "COMPANY_NAME" ,
+        "DRUG_STD" , 
+        "QTY" ,
+        "DOSAGE_TYPE" , 
+        "PACKING_TYPE" ,
+        "PRODUCT_STD_CD" ,
+        "PERMISSION_DATE" ,
+        "NORMAL_OR_SPECIAL" ,
+        "REPRESENT_CD" , 
+        "STD_CD",
+        "NEW_CD" ,  
+        --"DRUG_INGREDIENT_CODE" ,
+        "CANCEL_DATE",
+        "TRANSFER_START_DATE" ,
+        "TRANSFER_END_DATE" ,
+        "SERIAL_YN" ,
+        "SERIAL_REASON" ,
+        "ATC_CD" ,
+        "SPECIAL_CARE" ,
+        "DECODE" 
+       FROM BARCODEDATA WHERE aTC_CD LIKE 'N06A%' AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE) ;
+        
+        
+          -- 2012 ~ 2015³â ÇÁ·ÎÁ§Æ® Å×ÀÌºí CTAS ¼öÁ¤
+         CREATE TABLE N06A_DRUG AS (  
+        SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+         UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+      QTY ,
+      DOSAGE_TYPE , 
+      PACKING_TYPE ,
+      PRODUCT_STD_CD ,
+      PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+      REPRESENT_CD , 
+      STD_CD,
+      NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+      CANCEL_DATE,
+      TRANSFER_START_DATE ,
+      TRANSFER_END_DATE ,
+      SERIAL_YN ,
+      SERIAL_REASON ,
+      ATC_CD ,
+      SPECIAL_CARE ,
+      DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+        -- ºä ¸¸µé±â 
+        create view N06A_DRUG_view AS (  
+        SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+         UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+      QTY ,
+      DOSAGE_TYPE , 
+      PACKING_TYPE ,
+      PRODUCT_STD_CD ,
+      PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+      REPRESENT_CD , 
+      STD_CD,
+      NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+      CANCEL_DATE,
+      TRANSFER_START_DATE ,
+      TRANSFER_END_DATE ,
+      SERIAL_YN ,
+      SERIAL_REASON ,
+      ATC_CD ,
+      SPECIAL_CARE ,
+      DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+        select * from n06a_drug_view;
+        -- »ùÇÃ ¾ÆÀÌµð
+        SELECT * FROM DRUG_2015 WHERE USER_ID = '662040';
+        
+        select * from n06a_drug_view;
+        
+        DROP TABLE DRUG_2015_ALL;
+    
+    create view N06A_DRUG_view0 AS (  
+        SELECT A.DRUG_INGREDIENT_CODE FROM
+        (SELECT * FROM DRUG_2012 
+         UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+      QTY ,
+      DOSAGE_TYPE , 
+      PACKING_TYPE ,
+      PRODUCT_STD_CD ,
+      PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+      REPRESENT_CD , 
+      STD_CD,
+      NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+      CANCEL_DATE,
+      TRANSFER_START_DATE ,
+      TRANSFER_END_DATE ,
+      SERIAL_YN ,
+      SERIAL_REASON ,
+      ATC_CD ,
+      SPECIAL_CARE ,
+      DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        );
+        
+        select * from N06A_DRUG_view0;
+    
+    -- N06A_DRUG2
+    CREATE TABLE N06A_DRUG2  AS (  
+        SELECT * FROM
+        (SELECT * FROM DRUG_2012 
+         UNION ALL
+         SELECT * FROM DRUG_2013
+         UNION ALL
+          SELECT * FROM DRUG_2014_1
+          UNION ALL
+           SELECT * FROM DRUG_2014_2
+            UNION ALL
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+        -- N06A_DRUG_2015
+         CREATE TABLE N06A_DRUG_2015  AS (  
+        SELECT * FROM
+        (
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+         
+         -- N06A_DRUG_2014
+         CREATE TABLE N06A_DRUG_2014  AS (  
+        SELECT * FROM
+        (
+            SELECT * FROM DRUG_2014_1
+            UNION ALL
+            SELECT * FROM DRUG_2014_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+           CREATE view N06A_DRUG_2014  AS (  
+        SELECT * FROM
+        (
+            SELECT * FROM DRUG_2014_1
+            UNION ALL
+            SELECT * FROM DRUG_2014_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+        --
+          CREATE view N06A_DRUG_2013  AS (  
+        SELECT * FROM
+        DRUG_2013 A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+        
+        --
+         CREATE view N06A_DRUG_2012 AS (  
+        SELECT * FROM
+        DRUG_2012 A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;
+    
+     CREATE view N06A_DRUG_2015_VIEW  AS (  
+        SELECT * FROM
+        (
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06A%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+        ) ;

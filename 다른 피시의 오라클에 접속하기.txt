@@ -1,0 +1,53 @@
+서버 피시에서 설정할 파일 : listener.ora
+
+클라이언트 피시에서 설정할 파일 : tnsnames.ora
+
+상기 위의 2 파일은 오라클이 설치된 디폴트 경로에 들어 있다.
+C:\oraclexe\app\oracle\product\10.2.0\server\NETWORK\ADMIN
+
+
+1. 서버 쪽
+listener.ora 파일을 메모장으로 열어서 다음과 같이 수정하도록 한다.
+이미 들어 있는 텍스트를 복사하여 다음과 같이 수정하도록 한다.
+
+TESTCOM : 클라이언트에서 접근하기 위한 식별자
+HOST = 192.168.10.72
+	여기서 192.168.10.72는 서버의 아이피 주소이다.
+
+TESTCOM =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC_FOR_XE))
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.0.220)(PORT = 1521))
+    )
+  )
+
+사용자 oraman에서 샘플용 테이블을 생성한다.
+create table asdf( id varchar2(10) );
+
+insert into asdf values('호호호');
+insert into asdf values('하하하');
+commit ;
+
+접속이 잘 되지 않는 경우를 대비하여 윈도우 방화벽을 해제해준다.(이건 옵션 사항이다.)
+
+2. 클라이언트 쪽
+tnsnames.ora 파일을 메모장으로 열어서 다음과 같이 수정하도록 한다.
+이미 들어 있는 텍스트를 복사하여 다음과 같이 수정하도록 한다.
+
+TESTCOM =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.10.72)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = XE)
+    )
+  )
+
+sqlplus oraman/oracle@TESTCOM 엔터
+
+show user
+-- oraman인지 확인한다
+
+select * from asdf ;
+-- 데이터가 2건 들어 있는 지 확인한다.
