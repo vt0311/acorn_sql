@@ -1130,3 +1130,40 @@ create table barCodeData(
        AND DRUG_INGREDIENT_CODE IS NOT NULL) B
         WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
         ) ;
+        
+        
+        
+        -- n06AB¸¸ )
+        SELECT COUNT(*) FROM (
+          SELECT * FROM
+        (
+            SELECT * FROM DRUG_2015
+            UNION ALL
+            SELECT * FROM DRUG_2015_2) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+    --  QTY ,
+    --  DOSAGE_TYPE , 
+     -- PACKING_TYPE ,
+    --  PRODUCT_STD_CD ,
+    --  PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+     -- REPRESENT_CD , 
+     -- STD_CD,
+     -- NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     -- CANCEL_DATE,
+      TRANSFER_START_DATE ,
+     -- TRANSFER_END_DATE ,
+      --SERIAL_YN ,
+      --SERIAL_REASON ,
+      ATC_CD 
+     --SPECIAL_CARE ,
+     -- DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06AB%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2 );
+        
+        select * from N06A_DRUG_2015 where atc_cd like 'N06AB%';
