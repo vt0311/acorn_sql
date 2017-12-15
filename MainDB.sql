@@ -1167,3 +1167,9 @@ create table barCodeData(
         WHERE A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2 );
         
         select * from N06A_DRUG_2015 where atc_cd like 'N06AB%';
+        
+        select * from N06A_DRUG_2015 where sex='3';
+        
+        select count(*) from barcodedata;
+        
+        select product_name, COUNT(product_name) from N06A_DRUG_2015 where atc_cd like 'N06AB%' group by product_name ORDER BY COUNT(product_name) DESC ;
