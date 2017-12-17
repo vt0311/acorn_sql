@@ -1173,3 +1173,14 @@ create table barCodeData(
         select count(*) from barcodedata;
         
         select product_name, COUNT(product_name) from N06A_DRUG_2015 where atc_cd like 'N06AB%' group by product_name ORDER BY COUNT(product_name) DESC ;
+		
+		
+		
+		create table GNL_NM_CD(
+		
+		"DRUG_INGREDIENT_CODE" VARCHAR2(20 BYTE), 
+	
+		"INGREDIENT_NAME" VARCHAR2(200 BYTE), 
+		
+		"QTY" VARCHAR2(200 BYTE)
+    );

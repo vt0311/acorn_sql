@@ -160,3 +160,83 @@ select * from N06A_DRUG_VIEW;
         
 
             select * from N06A_DRUG_2015 where 
+			
+			
+			
+			
+			
+			 SELECT count(*) FROM
+        (SELECT * FROM DRUG_2012
+       
+        ) A,
+       (SELECT 
+       PRODUCT_NAME , 
+      COMPANY_NAME ,
+      DRUG_STD , 
+      QTY ,
+      DOSAGE_TYPE , 
+      PACKING_TYPE ,
+      PRODUCT_STD_CD ,
+      PERMISSION_DATE ,
+      NORMAL_OR_SPECIAL ,
+      REPRESENT_CD , 
+      STD_CD,
+      NEW_CD ,  
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+      CANCEL_DATE,
+      TRANSFER_START_DATE ,
+      TRANSFER_END_DATE ,
+      SERIAL_YN ,
+      SERIAL_REASON ,
+      ATC_CD ,
+      SPECIAL_CARE ,
+      DECODE 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06AB%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        WHERE A.DRUG_INGREDIENT_CODE(+) = B.DRUG_INGREDIENT_CODE2;
+        
+        
+         SELECT  * FROM
+        (SELECT * FROM DRUG_2012
+       
+        ) A  inner join
+       (SELECT 
+      
+      DRUG_INGREDIENT_CODE as DRUG_INGREDIENT_CODE2 ,
+     
+      ATC_CD 
+ 
+       FROM BARCODEDATA WHERE ATC_CD LIKE 'N06AB%' 
+       AND DRUG_INGREDIENT_CODE IS NOT NULL) B
+        on A.DRUG_INGREDIENT_CODE(+) = B.DRUG_INGREDIENT_CODE2
+        group by pres_id;
+        
+        select drug_ingredient_code, atc_cd from barcodedata where atc_cd like 'N06AB%' group by atc_cd, drug_ingredient_code ; 
+        
+    select * from     
+   (select * from DRUG_2012) A,     
+   (select drug_ingredient_code as  drug_ingredient_code2, atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredient_code, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE2
+ --  and DRUG_INGREDIENT_CODE2 is null
+;
+
+select  atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredient_code, atc_cd order by atc_cd;
+
+ select A.*, B.ATC_CD from     
+   (select * from DRUG_2012
+   union all
+   select * from DRUG_2013
+      union all
+   select * from DRUG_2014
+      union all
+   select * from DRUG_2015
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE;
+   
+   
+    select A.*, B.ATC_CD from     
+   (select * from DRUG_2012
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE;
