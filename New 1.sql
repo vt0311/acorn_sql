@@ -234,9 +234,49 @@ select  atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredi
    (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
    where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE;
    
+   select * from 
+   (select * from drug_dose) A right outer JOIN 
+ (select * from weather_solar) B
+   on A.RECUPERATE_DATE = B.RECUPERATE_DATE
+   order by A.RECUPERATE_DATE; 
    
-    select A.*, B.ATC_CD from     
+   
+   -- 2012 count
+   select RECUPERATE_DATE , count(RECUPERATE_DATE) from
+   ( select A.RECUPERATE_DATE,  B.ATC_CD from     
    (select * from DRUG_2012
    ) A,     
-   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
-   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE;
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+   
+   
+    -- 2013 count
+   select RECUPERATE_DATE , count(RECUPERATE_DATE) from
+   ( select A.RECUPERATE_DATE,  B.ATC_CD from     
+   (select * from DRUG_2013
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+
+
+    -- 2014 count
+   select RECUPERATE_DATE , count(RECUPERATE_DATE) as COUNT from
+   ( select A.RECUPERATE_DATE,  B.ATC_CD from     
+   (select * from DRUG_2014_1
+   union all
+   select * from DRUG_2014_2
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+   
+   
+select RECUPERATE_DATE, count(RECUPERATE_DATE) from drug_2012 where  group by RECUPERATE_DATE order by RECUPERATE_DATE;

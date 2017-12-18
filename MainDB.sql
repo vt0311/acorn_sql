@@ -1184,3 +1184,53 @@ create table barCodeData(
 		
 		"QTY" VARCHAR2(200 BYTE)
     );
+    
+    -- 28956 °³
+    select count(*) from (
+     select A.*, B.ATC_CD from     
+   (select * from DRUG_2012
+   union all
+   select * from DRUG_2013
+   union all
+   select * from DRUG_2014_1
+   union all
+   select * from DRUG_2014_2
+   union all
+   select * from DRUG_2015
+   union all
+   select * from DRUG_2015_2
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE 
+   --);
+   and ((recuperate_date >= '20120301' and recuperate_date <= '20120531' )
+    or (recuperate_date >= '20140301' and recuperate_date <= '20140531' )
+    or (recuperate_date >= '20150301' and recuperate_date <= '20150531' )
+    or  (recuperate_date >= '20130301' and recuperate_date <= '20130531' ))
+   
+   );
+    drop table drug_2011;
+    select count(*) from drug_2012 where atc_cd like 'N06AB%' and recuperate_date >= '20120301' and recuperate_date <= '20120531' ;
+    
+    create table weather_solar(
+    "DATE" VARCHAR2(200 BYTE), 
+	"TEMP_DIFF" VARCHAR2(200 BYTE), 
+    "ilsahap_mj_m2" VARCHAR2(200 BYTE), 
+    "ilsohap_hr"  VARCHAR2(200 BYTE)
+    );   
+    
+     create table drug_dose(
+     RECUPERATE_DATE VARCHAR2(200 BYTE), 
+     DOSE_DAYS_sum VARCHAR2(200 BYTE)
+     );
+     
+     select * from (
+    
+     (select * from weather_solar) a ,
+      (select * from drug_dose) b)
+     where a.DATE = b.RECUPERATE_DATE  ;
+     
+      select * from 
+     weather_solar a ,
+    drug_dose b
+     where a.DATE = b.RECUPERATE_DATE  ;
