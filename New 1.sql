@@ -234,6 +234,7 @@ select  atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredi
    (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
    where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE;
    
+   -- weather_drug0
    select * from 
    (select * from drug_dose) A right outer JOIN 
  (select * from weather_solar) B
@@ -244,8 +245,7 @@ select  atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredi
    -- 2012 count
    select RECUPERATE_DATE , count(RECUPERATE_DATE) from
    ( select A.RECUPERATE_DATE,  B.ATC_CD from     
-   (select * from DRUG_2012
-   ) A,     
+   (select * from DRUG_2012 ) A,     
    (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
    where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
    )
@@ -279,4 +279,91 @@ select  atc_cd from barcodedata where atc_cd like 'N06AB%' group by drug_ingredi
    order by RECUPERATE_DATE asc ;
    
    
+   -- 2015 count
+   select RECUPERATE_DATE , count(RECUPERATE_DATE) as COUNT from
+   ( select A.RECUPERATE_DATE,  B.ATC_CD from     
+   (select * from DRUG_2015
+   union all
+   select * from DRUG_2015_2
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+   
+   -- 2012 ~ 2015 Ä«¿îÆ®
+    select RECUPERATE_DATE , count(RECUPERATE_DATE) as COUNT from
+   ( select A.RECUPERATE_DATE,  B.ATC_CD from     
+   (
+   select * from DRUG_2012
+   union all
+   select * from DRUG_2013
+     union all
+   select * from DRUG_2014_1
+   union all
+   select * from DRUG_2014_2
+     union all
+   select * from DRUG_2015
+   union all
+   select * from DRUG_2015_2
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06A%' group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+   
+   
+    select RECUPERATE_DATE,  COUNT, dose_once, dose_oneday, dose_days, (dose_once*dose_oneday*dose_days) as dose_total, price  from
+    (
+   select A.RECUPERATE_DATE, count(A.RECUPERATE_DATE) as COUNT, A.dose_once, A.dose_oneday, A.dose_days, A.price , B.ATC_CD from     
+   (
+   select * from DRUG_2012
+   union all
+   select * from DRUG_2013
+     union all
+   select * from DRUG_2014_1
+    union all
+   select * from DRUG_2014_2
+     union all
+   select * from DRUG_2015
+    union all
+   select * from DRUG_2015_2
+   ) A,     
+   (select atc_cd, DRUG_INGREDIENT_CODE from barcodedata where atc_cd like 'N06AB%' 
+   group by DRUG_INGREDIENT_CODE, atc_cd order by atc_cd) B 
+   where A.DRUG_INGREDIENT_CODE = B.DRUG_INGREDIENT_CODE
+   )
+   group by RECUPERATE_DATE
+   order by RECUPERATE_DATE asc ;
+   
+   
 select RECUPERATE_DATE, count(RECUPERATE_DATE) from drug_2012 where  group by RECUPERATE_DATE order by RECUPERATE_DATE;
+
+select RECUPERATE_DATE, count(RECUPERATE_DATE)  from
+(select * from drug_dose) A INNER JOIN 
+ (select * from weather_solar) B
+   on A.RECUPERATE_DATE = B.RECUPERATE_DATE
+   order by A.RECUPERATE_DATE; 
+   
+   -- inner JOIN 
+     select count(*) from 
+   (select * from n06a_drug_dose) A JOIN 
+ (select * from weather_solar) B
+   on A.RECUPERATE_DATE = B.RECUPERATE_DATE
+   order by A.RECUPERATE_DATE; 
+   
+    select * from 
+   (select * from n06a_drug_dose) A JOIN 
+ (select * from weather_solar) B
+   on A.RECUPERATE_DATE = B.RECUPERATE_DATE
+   order by A.RECUPERATE_DATE; 
+   
+   -- right outer JOIN 
+       select count(*) from 
+   (select * from n06a_drug_dose) A right outer JOIN 
+ (select * from weather_solar) B
+   on A.RECUPERATE_DATE = B.RECUPERATE_DATE
+   order by A.RECUPERATE_DATE; 
+   

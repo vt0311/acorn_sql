@@ -1234,3 +1234,16 @@ create table barCodeData(
      weather_solar a ,
     drug_dose b
      where a.DATE = b.RECUPERATE_DATE  ;
+     
+     drop table n06a_drug_dose ;
+     
+      create table n06a_drug_price (
+     RECUPERATE_DATE VARCHAR2(200 BYTE), 
+     count VARCHAR2(200 BYTE),
+ 
+     dose_once varchar2(200),
+     dose_oneday varchar2(200),
+     dose_days varchar2(200),
+      dose_total varchar2(200),
+          price varchar2(200)
+     );
