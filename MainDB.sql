@@ -559,7 +559,8 @@ create table barCodeData(
 	"DOSE_ONEDAY" NUMBER(2,0), 
 	"DOSE_DAYS" NUMBER(4,0), 
 	"UNIT_COST" NUMBER(6,0), 
-	"PRICE" NUMBER(10,0)
+	"PRICE" NUMBER(10,0),
+    "DATA_STD_DT" VARCHAR2(20 BYTE)
  );
  
  --DELETE FROM DRUG_2015; 
@@ -1247,3 +1248,30 @@ create table barCodeData(
       dose_total varchar2(200),
           price varchar2(200)
      );
+     
+     
+     
+-- new table     
+CREATE TABLE NHIS_OPEN_T60_2015 (
+    "STND_Y" NUMBER(4,0), 
+	"IDV_ID" NUMBER(10,0), 
+	"KEY_SEQ" NUMBE 
+    3.,R(10,0), 
+	"SEQ_NO" NUMBER(3,0), 
+	"SEX" NUMBER(1,0), 
+	"AGE_GROUP" NUMBER(2,0), 
+	"SIDO" NUMBER(2,0), 
+	"RECU_FR_DT" VARCHAR2(20 BYTE), 
+	"GNL_NM_CD" VARCHAR2(20 BYTE), 
+	"DD_MQTY_FREQ" FLOAT(126), 
+	"DD_EXEC_FREQ" NUMBER(2,0), 
+	"MDCN_EXEC_FREQ" NUMBER(4,0), 
+	"UN_COST" NUMBER(6,0), 
+	"AMT" NUMBER(10,0),
+    "DATA_STD_DT" VARCHAR2(20 BYTE)
+ );
+     
+     
+     
+     
+     
